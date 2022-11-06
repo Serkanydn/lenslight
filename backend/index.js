@@ -1,6 +1,7 @@
 const express = require('express');
 require('dotenv').config()
 require('./mongo-connection')
+const { pageRouter } = require('./routes');
 
 const app = express();
 
@@ -10,13 +11,8 @@ app.set("view engine", "ejs")
 //static files middleware
 app.use(express.static('public'))
 
-app.get('/', (req, res) => {
-    res.render('index');
-})
+app.use('/', pageRouter);
 
-app.get('/about', (req, res) => {
-    res.render('about');
-})
 
 
 app.listen(process.env.PORT, () => [
