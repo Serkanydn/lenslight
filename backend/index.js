@@ -1,7 +1,9 @@
 const express = require('express');
 require('dotenv').config()
 require('./mongo-connection')
-const { pageRouter,photoRouter,userRouter } = require('./routes');
+const cookieParser = require('cookie-parser')
+const { pageRouter, photoRouter, userRouter } = require('./routes');
+
 
 const app = express();
 
@@ -12,7 +14,8 @@ app.set("view engine", "ejs")
 app.use(express.static('public'))
 app.use(express.json())
 //Form body içerisindeki verileri parse edebilmesi için.
-app.use(express.urlencoded({ extended:true}))
+app.use(express.urlencoded({ extended: true }))
+app.use(cookieParser())
 
 app.use('/', pageRouter);
 app.use('/photos', photoRouter);
