@@ -1,9 +1,10 @@
 const router = require('express').Router();
-const {getIndexPage,getAboutPage}=require('../controllers/pageController')
+const {getIndexPage,getAboutPage,getRegisterPage}=require('../controllers/pageController')
 
 
 router.route('/').get(getIndexPage);
 router.route('/about').get(getAboutPage);
+router.route('/register').get(getRegisterPage);
 
 
 

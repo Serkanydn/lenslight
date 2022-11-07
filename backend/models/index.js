@@ -1,4 +1,5 @@
-const Photo= require('./photoModel')
+const Photo= require('./photo')
+const User= require('./user')
 
 
-module.exports={Photo}
+module.exports={Photo,User}

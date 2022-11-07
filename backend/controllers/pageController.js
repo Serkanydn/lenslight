@@ -14,4 +14,12 @@ const getAboutPage = (req, res) => {
     )
 }
 
-module.exports = { getIndexPage, getAboutPage }
+const getRegisterPage = (req, res) => {
+    res.render('register',
+        {
+            link: 'register'
+        }
+    )
+}
+
+module.exports = { getIndexPage, getAboutPage,getRegisterPage }
