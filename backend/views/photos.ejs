@@ -3,9 +3,7 @@
 
    <body class="main-layout inner_page">
       <!-- loader  -->
-      <div class="loader_bg">
-         <div class="loader"><img src="images/loading.gif" alt="#" /></div>
-      </div>
+      <%- include("partials/_loader") %>
       <!-- end loader -->
 
       <!-- header -->
@@ -36,13 +34,13 @@
                               <img src="images/g1.jpg" alt="Bridge">
                               <div class="view_main">
                                  <div class="pose">
-                                    <a class="read_more" href="images/g1.jpg"><img src="images/ga.png" alt="#" /></a>
+                                    <a class="read_more" href="/photos/<%= photo._id %>"><img src="images/ga.png" alt="#" /></a>
                                     <h3 style="padding:10px 0;">
                                        <%= photo.name %>
                                     </h3>
 
                                     <p style="padding:10px 0;">
-                                       <%= photo.description %>
+                                       <%= photo.description.length >=80 ? photo.description.substring(0,60) + '...' : photo.description%>
                                     </p>
                                  </div>
                               </div>

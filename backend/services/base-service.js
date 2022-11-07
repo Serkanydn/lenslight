@@ -10,6 +10,10 @@ class BaseService {
     async load(){
         return await this.model.find();
     }
+
+    async findById(id) {
+        return await this.model.findById(id);
+    }
 }
 
 module.exports = BaseService
