@@ -22,4 +22,12 @@ const getRegisterPage = (req, res) => {
     )
 }
 
-module.exports = { getIndexPage, getAboutPage,getRegisterPage }
+const getLoginPage = (req, res) => {
+    res.render('login',
+        {
+            link: 'login'
+        }
+    )
+}
+
+module.exports = { getIndexPage, getAboutPage, getRegisterPage, getLoginPage }

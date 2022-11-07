@@ -14,6 +14,11 @@ class BaseService {
     async findById(id) {
         return await this.model.findById(id);
     }
+
+    
+    async findBy(property,value) {
+        return await this.model.findOne({[property]:value})
+    }
 }
 
 module.exports = BaseService
