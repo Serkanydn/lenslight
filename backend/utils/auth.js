@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken')
 const { userService } = require('../services')
 
 class Auth {
+
     createToken = (userId) => {
         return jwt.sign({ userId }, process.env.JWT_SECRET, {
             expiresIn: '1d'
@@ -27,6 +28,30 @@ class Auth {
                 error: 'Not authorized'
             })
         }
+    }
+
+    checkUser(req, res, next) {
+        const token = req.cookies.jwt;
+
+        if (!token) {
+            res.locals.user = null;
+            return next();
+
+        }
+
+        jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
+            if (err) {
+                console.log(err.message)
+                res.locals.user = null
+                return next();
+            }
+
+            const user = await userService.findById(decodedToken.userId);
+            res.locals.user = user;
+            next();
+        });
+
+
     }
 }
 

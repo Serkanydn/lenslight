@@ -3,7 +3,7 @@ require('dotenv').config()
 require('./mongo-connection')
 const cookieParser = require('cookie-parser')
 const { pageRouter, photoRouter, userRouter } = require('./routes');
-
+const { auth } = require('./utils');
 
 const app = express();
 
@@ -17,6 +17,8 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
 
+//routes
+app.get('*', auth.checkUser);
 app.use('/', pageRouter);
 app.use('/photos', photoRouter);
 app.use('/users', userRouter);

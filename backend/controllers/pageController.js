@@ -28,7 +28,12 @@ const getLoginPage = (req, res) => {
         {
             link: 'login'
         }
-    )
+    ) 
 }
 
-module.exports = { getIndexPage, getAboutPage, getRegisterPage, getLoginPage }
+const getLogout = (req, res) => {
+    res.cookie('jwt', '', { maxAge: 1 })
+    res.redirect('/');
+}
+
+module.exports = { getIndexPage, getAboutPage, getRegisterPage, getLoginPage, getLogout }
