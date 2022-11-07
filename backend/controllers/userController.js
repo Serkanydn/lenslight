@@ -5,21 +5,37 @@ const bcrypt = require('bcrypt');
 const createUser = async (req, res) => {
     try {
         const user = await userService.insert(req.body);
-        
+
         const token = auth.createToken(user._id);
 
-        res.cookie('jwt', token, {
-            httpOnly: true,
-            maxAge: 1000 * 60 * 60 * 24
-        })
+        // res.cookie('jwt', token, {
+        //     httpOnly: true,
+        //     maxAge: 1000 * 60 * 60 * 24
+        // })
 
-        res.redirect('/users/dashboard');
+        // res.redirect('/users/dashboard');
+
+        res.status(200).json({user:user._id})
 
     } catch (error) {
-        res.status(500).json({
-            succeded: false,
-            error
-        })
+
+        console.log(error)
+        let errors = {};
+
+        //Eğer aynı email varsa direk hata kodu fırlatıyor.
+        if(error.code===11000){
+            errors.email='The email is already registered';
+        }
+
+        if (error.name === 'ValidationError') {
+            Object.keys(error.errors).forEach((key) => {
+                errors[key] = error.errors[key].message
+            })
+        }
+
+        res.status(400).json(
+            errors,
+        )
     }
 }
 
