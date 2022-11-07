@@ -1,4 +1,5 @@
 const pageRouter  = require('./pageRoute');
+const photoRouter  = require('./photoRoute');
 
 
-module.exports = { pageRouter }
+module.exports = { pageRouter,photoRouter }
