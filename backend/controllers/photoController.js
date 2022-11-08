@@ -1,12 +1,25 @@
 const { photoService } = require('../services');
+const cloudinary = require('cloudinary').v2
+const fs = require('fs');
 
 const createPhoto = async (req, res) => {
+
+    const result = await cloudinary.uploader.upload(
+        req.files.image.tempFilePath,
+        {
+            use_filename: true,
+            folder: 'lenslight'
+        }
+    );
+
     try {
-        const photo = await photoService.insert(req.body);
-        res.status(201).json({
-            succeded: true,
-            photo
-        })
+        const { name, description } = req.body
+        await photoService.insert({ name, description, url: result.secure_url, user: res.locals.user });
+
+        fs.unlinkSync(req.files.image.tempFilePath);
+
+        res.status(201).redirect('/users/dashboard');
+
     } catch (error) {
         res.status(500).json({
             succeded: false,
@@ -26,8 +39,8 @@ const getAllPhotos = async (req, res) => {
 
     } catch (error) {
         res.status(500).json({
-            succeded: false, 
-            error 
+            succeded: false,
+            error
         })
     }
 }
@@ -35,9 +48,10 @@ const getAllPhotos = async (req, res) => {
 const getPhoto = async (req, res) => {
     try {
 
-        const {id} = req.params
+        const { id } = req.params
 
-        const photo = await photoService.findById(id);
+        const photo = await (await photoService.findById(id)).populate('user');
+        console.log(photo);
         res.status(200).render('photo', {
             photo,
             link: "photos"
@@ -51,4 +65,4 @@ const getPhoto = async (req, res) => {
     }
 }
 
-module.exports = { createPhoto, getAllPhotos,getPhoto }
+module.exports = { createPhoto, getAllPhotos, getPhoto }

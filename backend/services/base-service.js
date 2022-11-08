@@ -16,8 +16,12 @@ class BaseService {
     }
 
     
-    async findBy(property,value) {
+    async findOne(property,value) {
         return await this.model.findOne({[property]:value})
+    }
+
+    async find(property,value) {
+        return await this.model.find({[property]:value})
     }
 }
 
