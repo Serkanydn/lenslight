@@ -68,13 +68,101 @@ const loginUser = async (req, res) => {
 
 
 const getDashboardPage = async (req, res) => {
-    const photos = await photoService.find( 'user', res.locals.user)
+    const photos = await photoService.find('user', res.locals.user)
+    const user = await (await userService.findById(res.locals.user._id)).populate(['followings', 'followers'])
+
+    console.log(user)
+
     res.render('dashboard',
         {
             link: 'dashboard',
+            user,
             photos
         }
     )
 }
 
-module.exports = { createUser, loginUser, getDashboardPage }
+const getAllUsers = async (req, res) => {
+    try {
+
+
+        const users = await userService.query({ _id: { $ne: res.locals.user._id } })
+        res.status(200).render('users', {
+            users,
+            link: "users"
+        })
+
+    } catch (error) {
+        res.status(500).json({
+            succeded: false,
+            error
+        })
+    }
+}
+
+const getAUser = async (req, res) => {
+    try {
+
+        const { id } = req.params
+
+        const user = await userService.findById(id)
+        const photos = await photoService.find('user', user)
+
+        const inFollowers = user.followers.some((follower) => follower.equals(res.locals.user._id))
+
+        res.status(200).render('user', {
+            user,
+            photos,
+            inFollowers,
+            link: "users"
+        })
+
+    } catch (error) {
+        res.status(500).json({
+            succeded: false,
+            error
+        })
+    }
+}
+
+
+const follow = async (req, res) => {
+    try {
+
+        const { id } = req.params
+
+        await userService.follow(id, res.locals.user._id)
+
+        // res.status(200).json({
+        //     succeded: true,
+        //     followingUser
+        // })
+
+        res.status(200).redirect(`back`)
+
+    } catch (error) {
+        res.status(500).json({
+            succeded: false,
+            error
+        })
+    }
+}
+
+
+const unFollow = async (req, res) => {
+    try {
+
+        const { id } = req.params
+
+        await userService.unFollow(id, res.locals.user._id)
+        res.status(200).redirect(`back`)
+
+    } catch (error) {
+        res.status(500).json({
+            succeded: false,
+            error
+        })
+    }
+}
+
+module.exports = { createUser, loginUser, getDashboardPage, getAllUsers, getAUser, follow, unFollow }

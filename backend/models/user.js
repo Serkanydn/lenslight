@@ -7,19 +7,31 @@ const UserSchema = mongoose.Schema({
         type: String,
         required: [true, "User name area is required"],
         lowercase: true,
-        validate:[validator.isAlphanumeric,'Only Alphanumaris characters']
+        validate: [validator.isAlphanumeric, 'Only Alphanumaris characters']
     },
     email: {
         type: String,
         required: [true, "Email area is required"],
         unique: true,
-        validate: [validator.isEmail,'Valid email is required']
+        validate: [validator.isEmail, 'Valid email is required']
     },
     password: {
         type: String,
         required: [true, "Password area is required"],
-        minLength: [4,'At least 4 characters']
-    }
+        minLength: [4, 'At least 4 characters']
+    },
+    followers: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        }
+    ],
+    followings: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        }
+    ],
 },
     {
         timestamps: true

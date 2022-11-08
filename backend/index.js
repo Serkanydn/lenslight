@@ -4,6 +4,7 @@ const { pageRouter, photoRouter, userRouter } = require('./routes');
 const { auth } = require('./utils');
 const fileUpload = require('express-fileupload');
 const cloudinary = require('cloudinary').v2
+const methodOverride=require('method-override')
 
 require('dotenv').config()
 require('./mongo-connection')
@@ -26,6 +27,9 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
 app.use(fileUpload({ useTempFiles: true }))
+app.use(methodOverride('_method',{
+    methods: ['POST', 'GET']
+}))
 
 //routes
 app.use('*', auth.checkUser);

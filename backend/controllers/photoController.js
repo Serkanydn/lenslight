@@ -31,11 +31,12 @@ const createPhoto = async (req, res) => {
 
 const getAllPhotos = async (req, res) => {
     try {
-        const photos = await photoService.load();
+        const photos =res.locals.user ? await photoService.query({ user: { $ne : res.locals.user } })   : await photoService.load() 
         res.render('photos', {
             photos,
             link: "photos"
         })
+      
 
     } catch (error) {
         res.status(500).json({
@@ -51,7 +52,6 @@ const getPhoto = async (req, res) => {
         const { id } = req.params
 
         const photo = await (await photoService.findById(id)).populate('user');
-        console.log(photo);
         res.status(200).render('photo', {
             photo,
             link: "photos"
