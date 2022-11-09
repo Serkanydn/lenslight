@@ -32,6 +32,7 @@ const createPhoto = async (req, res) => {
 const getAllPhotos = async (req, res) => {
     try {
         const photos = res.locals.user ? await photoService.query({ user: { $ne: res.locals.user } }) : await photoService.load()
+
         res.render('photos', {
             photos,
             link: "photos"
@@ -52,9 +53,17 @@ const getPhoto = async (req, res) => {
 
         const { id } = req.params
 
-        const photo = await photoService.findById(id)
+        const photo = await (await photoService.findById(id)).populate('user');
+
+        let isOwner = false;
+
+        if (res.locals.user) {
+            isOwner = photo.user.equals(res.locals.user);
+        }
+
         res.status(200).render('photo', {
             photo,
+            isOwner,
             link: "photos"
         })
 
@@ -72,7 +81,7 @@ const deletePhoto = async (req, res) => {
 
         const { id } = req.params
 
-        const photo = await (await photoService.findById(id)).populate('user');
+        const photo = await photoService.findById(id);
 
         const photoId = photo.image_id;
 

@@ -1,58 +1,64 @@
 <%- include("partials/_header") %>
 
-   <!-- body -->
+    <!-- body -->
 
-   <body class="main-layout inner_page">
-      <!-- loader  -->
-      <%- include("partials/_loader") %>
-         <!-- end loader -->
+    <body class="main-layout inner_page">
+        <!-- loader  -->
+        <%- include("partials/_loader") %>
+            <!-- end loader -->
 
-         <!-- header -->
-         <%- include("partials/_menu") %>
-            <!-- end header inner -->
+            <!-- header -->
+            <%- include("partials/_menu") %>
+                <!-- end header inner -->
 
-            <!-- about -->
-            <div class="about">
-               <div class="container">
-                  <div class="row">
-                     <div class="col-md-6">
-                        <div class="titlepage text_align_left">
+                <!-- about -->
+                <div class="about">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="titlepage text_align_left">
 
-                           <h3 style="font-size:24px; color:white">
-                              <%= photo.name %>
-                           </h3>
-                           <p>
-                              <%=photo.description%>
-                           </p>
-                           <a class="read_more" href="/users/<%= photo.user._id %>">
-                              Photographer: <%= photo.user.userName %>
-                           </a>
+                                    <h3 style="font-size:24px; color:white">
+                                        <%= photo.name %>
+                                    </h3>
+                                    <p>
+                                        <%=photo.description%>
+                                    </p>
+                                    <a class="read_more" href="/users/<%= photo.user._id %>">
+                                        Photographer: <%= photo.user.userName %>
+                                    </a>
 
+                                    <% if(isOwner){ %>
 
-                           <div style="margin-top: 30px ;">
-                              <ul style="display: flex; justify-content: space-between;">
-                                 <li><button style="min-width: 266px;" class="read_more" data-toggle="modal"
-                                       data-target="#updateModal">Update</button></li>
-                                 <li><a style="min-width: 266px;" class="read_more"
-                                       href="/photos/<%= photo._id %>?_method=DELETE"
-                                       onclick="return confirm('Do you want to delete the photo')">Delete</a></li>
-                              </ul>
-                           </div>
+                                        <div style="margin-top: 30px ;">
+                                            <ul style="display: flex; justify-content: space-between;">
+                                                <li><button style="min-width: 266px;" class="read_more"
+                                                        data-toggle="modal" data-target="#updateModal">Update</button>
+                                                </li>
+                                                <li><a style="min-width: 266px;" class="read_more"
+                                                        href="/photos/<%= photo._id %>?_method=DELETE"
+                                                        onclick="return confirm('Do you want to delete the photo')">Delete</a>
+                                                </li>
+                                            </ul>
+                                        </div>
 
+                                        <%}%>
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="about_img">
+                                    <figure><img style="z-index:1" src="<%= photo.url %>" alt="<%= photo.name %>">
+                                    </figure>
+                                </div>
+                            </div>
                         </div>
-                     </div>
-                     <div class="col-md-6">
-                        <div class="about_img">
-                           <figure><img style="z-index:1" src="<%= photo.url %>" alt="<%= photo.name %>"></figure>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-            </div>
-            <!-- end about -->
+                    </div>
+                </div>
+                <!-- end about -->
 
-            
-            <div id="updateModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog"
+
+                <div id="updateModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog"
                     aria-labelledby="myLargeModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-lg">
                         <div class="modal-content">
@@ -73,17 +79,16 @@
                                         </div>
                                     </div>
                                     <div class="col-md-10 offset-md-1">
-                                        <form id="request" class="main_form" method="POST" action="/photos/<%=photo._id %>?_method=PUT"
-                                            enctype="multipart/form-data">
+                                        <form id="request" class="main_form" method="POST"
+                                            action="/photos/<%=photo._id %>?_method=PUT" enctype="multipart/form-data">
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <input value="<%= photo.name %>" class="form_control" placeholder="Name" type="text"
-                                                        name="name">
+                                                    <input value="<%= photo.name %>" class="form_control"
+                                                        placeholder="Name" type="text" name="name">
                                                 </div>
                                                 <div class="col-md-12">
                                                     <textarea name="description" style="height: 150px;"
-                                                        class="form_control" placeholder="Description"
-                                                        rows="5"><%= photo.description %>
+                                                        class="form_control" placeholder="Description" rows="5"><%= photo.description %>
                                                       </textarea>
                                                 </div>
 
@@ -105,13 +110,13 @@
                     </div>
                 </div>
 
-            <!-- end footer -->
-            <%- include("partials/_footer") %>
-               <!-- end footer -->
+                <!-- end footer -->
+                <%- include("partials/_footer") %>
+                    <!-- end footer -->
 
-               <!-- Javascript files-->
-               <%- include("partials/_jsFiles") %>
+                    <!-- Javascript files-->
+                    <%- include("partials/_jsFiles") %>
 
-   </body>
+    </body>
 
-   </html>
+    </html>

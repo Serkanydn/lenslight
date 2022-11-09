@@ -35,6 +35,10 @@ class BaseService {
     async removeBy(property, value) {
         return this.model.deleteOne({ [property]: value })
     }
+
+    async countDocuments(){
+        return await this.model.countDocuments({});
+    }
 }
 
 module.exports = BaseService
