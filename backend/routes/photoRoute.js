@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { createPhoto, getAllPhotos, getPhoto } = require('../controllers/photoController')
+const { createPhoto, getAllPhotos, getPhoto,deletePhoto } = require('../controllers/photoController')
 
 
 router.route('/')
@@ -9,6 +9,7 @@ router.route('/')
 router.route('/:id')
     .get(getPhoto);
 
-
+router.route('/:id')
+    .delete(deletePhoto);
 
 module.exports = router

@@ -14,7 +14,7 @@ const createPhoto = async (req, res) => {
 
     try {
         const { name, description } = req.body
-        await photoService.insert({ name, description, url: result.secure_url, user: res.locals.user });
+        await photoService.insert({ name, description, url: result.secure_url, image_id: result.public_id, user: res.locals.user });
 
         fs.unlinkSync(req.files.image.tempFilePath);
 
@@ -31,12 +31,12 @@ const createPhoto = async (req, res) => {
 
 const getAllPhotos = async (req, res) => {
     try {
-        const photos =res.locals.user ? await photoService.query({ user: { $ne : res.locals.user } })   : await photoService.load() 
+        const photos = res.locals.user ? await photoService.query({ user: { $ne: res.locals.user } }) : await photoService.load()
         res.render('photos', {
             photos,
             link: "photos"
         })
-      
+
 
     } catch (error) {
         res.status(500).json({
@@ -49,9 +49,10 @@ const getAllPhotos = async (req, res) => {
 const getPhoto = async (req, res) => {
     try {
 
+
         const { id } = req.params
 
-        const photo = await (await photoService.findById(id)).populate('user');
+        const photo = await photoService.findById(id)
         res.status(200).render('photo', {
             photo,
             link: "photos"
@@ -65,4 +66,29 @@ const getPhoto = async (req, res) => {
     }
 }
 
-module.exports = { createPhoto, getAllPhotos, getPhoto }
+const deletePhoto = async (req, res) => {
+    try {
+
+
+        const { id } = req.params
+
+        const photo = await (await photoService.findById(id)).populate('user');
+
+        const photoId = photo.image_id;
+
+        await cloudinary.uploader.destroy(photoId);
+
+        await photoService.removeBy('_id', id)
+
+        res.status(200).redirect('/users/dashboard');
+
+    } catch (error) {
+        res.status(500).json({
+            succeded: false,
+            error
+        })
+    }
+}
+
+
+module.exports = { createPhoto, getAllPhotos, getPhoto, deletePhoto }

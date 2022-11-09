@@ -12,12 +12,16 @@ const PhotoSchema = mongoose.Schema({
         trim: true
     },
     user:{
-        type:mongoose.Schema.Types.ObjectId,
+        type:mongoose.Schema.Types.ObjectId,  
         ref:'User'
     },
     url:{
         type:String,
         required: true
+    },
+    image_id:{
+        type:String,
+        
     }
 },
     {
