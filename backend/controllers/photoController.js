@@ -90,5 +90,43 @@ const deletePhoto = async (req, res) => {
     }
 }
 
+const updatePhoto = async (req, res) => {
+    try {
 
-module.exports = { createPhoto, getAllPhotos, getPhoto, deletePhoto }
+        const { id } = req.params
+        const photo = await photoService.findById(id)
+
+        if (req.files) {
+            await cloudinary.uploader.destroy(photo.image_id);
+
+            const result = await cloudinary.uploader.upload(
+                req.files.image.tempFilePath,
+                {
+                    use_filename: true,
+                    folder: 'lenslight'
+                }
+            );
+            photo.url = result.secure_url;
+            photo.image_id = result.public_id
+            fs.unlinkSync(req.files.image.tempFilePath);
+        }
+
+        const { name, description } = req.body;
+        photo.name = name;
+        photo.description = description
+
+        photo.save();
+
+        res.status(200).redirect(`/photos/${req.params.id}`);
+
+
+    } catch (error) {
+        res.status(500).json({
+            succeded: false,
+            error
+        })
+    }
+}
+
+
+module.exports = { createPhoto, getAllPhotos, getPhoto, deletePhoto, updatePhoto }
