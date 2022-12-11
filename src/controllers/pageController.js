@@ -1,53 +1,41 @@
-const nodemailer = require('nodemailer');
-const { photoService, userService } = require('../services');
+const nodemailer = require("nodemailer");
+const { photoService, userService } = require("../services");
 
 const getIndexPage = async (req, res) => {
-
   const photos = await photoService.sortByDate(3);
   const numOfPhotos = await photoService.countDocuments();
-  const numOfUser = await userService.countDocuments()
-  res.render('index',
-    {
-      link: 'index',
-      photos,
-      numOfUser,
-      numOfPhotos
-    }
-  )
-}
+  const numOfUser = await userService.countDocuments();
+  res.render("index", {
+    link: "index",
+    photos,
+    numOfUser,
+    numOfPhotos,
+  });
+};
 
 const getAboutPage = (req, res) => {
-  res.render('about',
-    {
-      link: 'about'
-    }
-  )
-}
+  res.render("about", {
+    link: "about",
+  });
+};
 
 const getRegisterPage = (req, res) => {
-  res.render('register',
-    {
-      link: 'register'
-    }
-  )
-}
+  res.render("register", {
+    link: "register",
+  });
+};
 
 const getLoginPage = (req, res) => {
-  res.render('login',
-    {
-      link: 'login'
-    }
-  )
-}
+  res.render("login", {
+    link: "login",
+  });
+};
 
 const getContactPage = (req, res) => {
-  res.render('contact',
-    {
-      link: 'contact'
-    }
-  )
-}
-
+  res.render("contact", {
+    link: "contact",
+  });
+};
 
 const sendMail = async (req, res) => {
   const htmlTemplate = `
@@ -182,9 +170,7 @@ const sendMail = async (req, res) => {
 </html>
     `;
 
-
   try {
-
     // create reusable transporter object using the default SMTP transport
     let transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
@@ -203,20 +189,26 @@ const sendMail = async (req, res) => {
       html: htmlTemplate, // html body
     });
 
-
-
-    res.status(200).json({ succeded: true })
+    res.status(200).json({ succeded: true });
   } catch (error) {
     res.status(500).json({
       succeded: false,
-      error
-    })
+      error,
+    });
   }
-}
+};
 
 const getLogout = (req, res) => {
-  res.cookie('jwt', '', { maxAge: 1 })
-  res.redirect('/');
-}
+  res.cookie("jwt", "", { maxAge: 1 });
+  res.redirect("/");
+};
 
-module.exports = { getIndexPage, getAboutPage, getRegisterPage, getLoginPage, getLogout, getContactPage, sendMail }
+module.exports = {
+  getIndexPage,
+  getAboutPage,
+  getRegisterPage,
+  getLoginPage,
+  getLogout,
+  getContactPage,
+  sendMail,
+};
